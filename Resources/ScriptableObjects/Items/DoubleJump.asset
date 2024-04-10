@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89f98f44ad5f40d3bd565e9560c849d7, type: 3}
+  m_Name: DoubleJump
+  m_EditorClassIdentifier: 
+  Name: Double Jump
+  Description: Allows you to jump a second time before landing.
+  Icon: {fileID: 21300000, guid: 7098f544b9b8244f0bd562a10505e04c, type: 3}
+  TokenId: 1005
+  PowerUpType: 1
+  Tier: 1
