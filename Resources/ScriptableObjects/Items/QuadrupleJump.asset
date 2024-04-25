@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89f98f44ad5f40d3bd565e9560c849d7, type: 3}
+  m_Name: QuadrupleJump
+  m_EditorClassIdentifier: 
+  Name: Quadruple Jump
+  Description: Allows you to jump a fourth time before landing.
+  Icon: {fileID: 21300000, guid: 33373fc745eae4a7e964feb04eeaca8e, type: 3}
+  TokenId: 1023
+  PowerUpType: 1
+  Tier: 3
+  IsHat: 0

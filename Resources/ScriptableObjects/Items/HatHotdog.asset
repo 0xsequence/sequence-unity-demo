@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89f98f44ad5f40d3bd565e9560c849d7, type: 3}
+  m_Name: HatHotdog
+  m_EditorClassIdentifier: 
+  Name: HatHotdog
+  Description: Wear a hotdog as a hat.
+  Icon: {fileID: 21300000, guid: 48adb2ca56fe5754a86c539a6bd10636, type: 3}
+  TokenId: 1019
+  PowerUpType: 5
+  Tier: 0
+  IsHat: 1
