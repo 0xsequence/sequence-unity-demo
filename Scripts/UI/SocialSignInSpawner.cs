@@ -21,6 +21,10 @@ namespace Game.Scripts
             toDisable.Add(_facebookSignInButton);
             toDisable.Add(_discordSignInButton);
             toDisable.Add(_appleSignInButton);
+#else
+            toDisable.Add(_facebookSignInButton);
+            toDisable.Add(_discordSignInButton);
+            toDisable.Add(_appleSignInButton);
 #endif
             int items = toDisable.Count;
             for (int i = 0; i < items; i++)

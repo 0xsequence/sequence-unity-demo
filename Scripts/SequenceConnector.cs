@@ -199,5 +199,11 @@ namespace Game.Scripts
             Instance = null;
             Destroy(gameObject);
         }
+
+        public void LinkEOA()
+        {
+            EOAWalletLinker linker = new EOAWalletLinker(Wallet, "https://demo-waas-wallet-link-server.tpin.workers.dev/generateNonce");
+            linker.OpenEOAWalletLink(Chain);
+        }
     }
 }
