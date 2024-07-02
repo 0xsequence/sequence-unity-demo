@@ -88,6 +88,7 @@ namespace Game.Scripts
             Wallet.OnDeployContractFailed -= OnDeployContractFailedHandler;
             Wallet.OnDropSessionComplete -= OnDropSessionCompleteHandler;
             Wallet.OnSessionsFound -= OnSessionsFoundHandler;
+            WaaSWallet.OnWaaSWalletCreated -= OnWaaSWalletCreated;
             Wallet.DropThisSession();
             SceneManager.LoadScene("LoginScene");
         }
