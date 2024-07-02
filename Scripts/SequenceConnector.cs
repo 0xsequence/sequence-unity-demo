@@ -127,7 +127,10 @@ namespace Game.Scripts
         }
         
         private void OnDropSessionCompleteHandler(string sessionId) {
-            // Do something
+            if (sessionId == Wallet.SessionId)
+            {
+                Destroy(gameObject);
+            }
         }
         
         private void OnSessionsFoundHandler(WaaSSession[] sessions) {
@@ -197,7 +200,7 @@ namespace Game.Scripts
         public void Logout()
         {
             Instance = null;
-            Destroy(gameObject);
+            Wallet.DropThisSession();
         }
 
         public void LinkEOA()
