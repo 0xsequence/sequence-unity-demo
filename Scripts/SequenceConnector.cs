@@ -88,7 +88,7 @@ namespace Game.Scripts
             Wallet.OnDeployContractFailed -= OnDeployContractFailedHandler;
             Wallet.OnDropSessionComplete -= OnDropSessionCompleteHandler;
             Wallet.OnSessionsFound -= OnSessionsFoundHandler;
-            Wallet.DropThisSession();
+            WaaSWallet.OnWaaSWalletCreated -= OnWaaSWalletCreated;
             SceneManager.LoadScene("LoginScene");
         }
 
@@ -127,7 +127,10 @@ namespace Game.Scripts
         }
         
         private void OnDropSessionCompleteHandler(string sessionId) {
-            // Do something
+            if (sessionId == Wallet.SessionId)
+            {
+                Destroy(gameObject);
+            }
         }
         
         private void OnSessionsFoundHandler(WaaSSession[] sessions) {
@@ -197,7 +200,13 @@ namespace Game.Scripts
         public void Logout()
         {
             Instance = null;
-            Destroy(gameObject);
+            Wallet.DropThisSession();
+        }
+
+        public void LinkEOA()
+        {
+            EOAWalletLinker linker = new EOAWalletLinker(Wallet, "https://demo-waas-wallet-link-server.tpin.workers.dev/generateNonce");
+            linker.OpenEOAWalletLink(Chain);
         }
     }
 }

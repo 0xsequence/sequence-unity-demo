@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Sequence.Config;
+using Sequence.Utils.SecureStorage;
 using Sequence.WaaS;
 using UnityEngine;
 
@@ -32,6 +34,11 @@ namespace Game.Scripts
         private void OnApplicationQuit()
         {
             SequenceConnector.Instance.SubmitQueuedTransactions(true);
+
+            if (SequenceConfig.GetConfig().StoreSessionPrivateKeyInSecureStorage && SecureStorageFactory.IsSupportedPlatform())
+            {
+                return;
+            }
             
             int sessionsCount = _sessions.Count;
             for (int i = 0; i < sessionsCount; i++)
