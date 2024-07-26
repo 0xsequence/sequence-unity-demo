@@ -2,16 +2,10 @@ using System;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using Sequence;
 using Sequence.ABI;
-using Sequence.Contracts;
-using Sequence.Provider;
 using Sequence.Relayer;
-using Sequence.Transactions;
 using Sequence.Utils;
-using Sequence.WaaS;
-using Sequence.Wallet;
-using SequenceSDK.WaaS;
+using Sequence.EmbeddedWallet;
 using UnityEngine;
 
 namespace Game.Scripts

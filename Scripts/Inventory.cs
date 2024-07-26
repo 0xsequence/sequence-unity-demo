@@ -4,8 +4,7 @@ using System.Numerics;
 using System.Threading.Tasks;
 using Sequence;
 using Sequence.Contracts;
-using Sequence.WaaS;
-using SequenceSDK.WaaS;
+using Sequence.EmbeddedWallet;
 using UnityEngine;
 
 namespace Game.Scripts

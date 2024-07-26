@@ -1,5 +1,5 @@
 using System;
-using Sequence.WaaS;
+using Sequence.EmbeddedWallet;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,17 +9,17 @@ namespace Game.Scripts
     {
         private void Awake()
         {
-            WaaSWallet.OnWaaSWalletCreated += OnWaaSWalletCreated;
+            SequenceWallet.OnWalletCreated += OnWalletCreated;
         }
         
-        private void OnWaaSWalletCreated(WaaSWallet wallet)
+        private void OnWalletCreated(SequenceWallet wallet)
         {
             LoadGame();
         }
 
         private void OnDestroy()
         {
-            WaaSWallet.OnWaaSWalletCreated -= OnWaaSWalletCreated;
+            SequenceWallet.OnWalletCreated -= OnWalletCreated;
         }
 
         public void LoadGame()

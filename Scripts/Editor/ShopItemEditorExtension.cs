@@ -39,7 +39,7 @@ namespace Game.Scripts.Editor
             {
                 Debug.LogError("Private key not set in environment variables");
             }
-            EthWallet wallet = new EthWallet(privateKey);
+            EOAWallet wallet = new EOAWallet(privateKey);
             
             int costItems = shopItem.CostItems.Length;
             BigInteger[] burnTokenIds = new BigInteger[costItems];

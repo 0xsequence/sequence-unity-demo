@@ -5,9 +5,7 @@ using System.Threading.Tasks;
 using Sequence;
 using Sequence.Contracts;
 using Sequence.Relayer;
-using Sequence.WaaS;
-using Sequence.WaaS.Authentication;
-using SequenceSDK.WaaS;
+using Sequence.EmbeddedWallet;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
@@ -15,12 +13,12 @@ using UnityEngine.Serialization;
 namespace Game.Scripts
 {
     /// <summary>
-    /// Attach this to a GameObject in your scene. It will automatically capture a WaaSWallet when it is created and setup all event handlers (fill in your own logic).
+    /// Attach this to a GameObject in your scene. It will automatically capture a SequenceWallet when it is created and setup all event handlers (fill in your own logic).
     /// This mono behaviour will persist between scenes and is accessed via SequenceConnector.Instance singleton.
     /// </summary>
     public class SequenceConnector : MonoBehaviour
     {
-        private WaaSTransactionQueuer _transactionQueuer;
+        private SequenceWalletTransactionQueuer _transactionQueuer;
         private PermissionedMinterTransactionQueuer _permissionedMinterTransactionQueuer;
         
         public const string ContractAddress = "0x32d70df2b156242f1b19f60fa40d05f8966244ec"; 
@@ -30,7 +28,7 @@ namespace Game.Scripts
         public const Chain Chain = Sequence.Chain.ArbitrumNova;
         public static SequenceConnector Instance { get; private set; }
 
-        public WaaSWallet Wallet { get; private set; }
+        public SequenceWallet Wallet { get; private set; }
         public IIndexer Indexer { get; private set; }
         
         public Inventory Inventory { get; private set; }
@@ -53,15 +51,15 @@ namespace Game.Scripts
                 Destroy(gameObject);
             }
 
-            WaaSWallet.OnWaaSWalletCreated += OnWaaSWalletCreated;
+            SequenceWallet.OnWalletCreated += OnWalletCreated;
             Indexer = new ChainIndexer(Chain);
-            _transactionQueuer = GetComponent<WaaSTransactionQueuer>();
+            _transactionQueuer = GetComponent<SequenceWalletTransactionQueuer>();
             _permissionedMinterTransactionQueuer = GetComponent<PermissionedMinterTransactionQueuer>();
             ItemCatalogue = new ItemCatalogue();
             SessionTransactionHashes = new List<string>();
         }
 
-        private void OnWaaSWalletCreated(WaaSWallet wallet)
+        private void OnWalletCreated(SequenceWallet wallet)
         {
             Wallet = wallet;
             Wallet.OnSendTransactionComplete += OnSendTransactionCompleteHandler;
@@ -88,7 +86,7 @@ namespace Game.Scripts
             Wallet.OnDeployContractFailed -= OnDeployContractFailedHandler;
             Wallet.OnDropSessionComplete -= OnDropSessionCompleteHandler;
             Wallet.OnSessionsFound -= OnSessionsFoundHandler;
-            WaaSWallet.OnWaaSWalletCreated -= OnWaaSWalletCreated;
+            SequenceWallet.OnWalletCreated -= OnWalletCreated;
             SceneManager.LoadScene("LoginScene");
         }
 
@@ -133,7 +131,7 @@ namespace Game.Scripts
             }
         }
         
-        private void OnSessionsFoundHandler(WaaSSession[] sessions) {
+        private void OnSessionsFoundHandler(Session[] sessions) {
             // Do something
         }
 

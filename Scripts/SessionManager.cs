@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Sequence.Config;
 using Sequence.Utils.SecureStorage;
-using Sequence.WaaS;
+using Sequence.EmbeddedWallet;
 using UnityEngine;
 
 namespace Game.Scripts
@@ -10,7 +10,7 @@ namespace Game.Scripts
     {
         public static SessionManager Instance;
         
-        private List<WaaSWallet> _sessions = new List<WaaSWallet>();
+        private List<SequenceWallet> _sessions = new List<SequenceWallet>();
         private void Awake()
         {
             if (Instance == null)
@@ -23,10 +23,10 @@ namespace Game.Scripts
                 Destroy(gameObject);
             }
             
-            WaaSWallet.OnWaaSWalletCreated += AddSession;
+            SequenceWallet.OnWalletCreated += AddSession;
         }
 
-        private void AddSession(WaaSWallet sessionWallet)
+        private void AddSession(SequenceWallet sessionWallet)
         {
             _sessions.Add(sessionWallet);
         }
@@ -66,8 +66,8 @@ namespace Game.Scripts
 
         private void OnDestroy()
         {
-            WaaSWallet.OnWaaSWalletCreated -= AddSession;
-            _sessions = new List<WaaSWallet>();
+            SequenceWallet.OnWalletCreated -= AddSession;
+            _sessions = new List<SequenceWallet>();
         }
     }
 }
