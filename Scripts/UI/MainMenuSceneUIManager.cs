@@ -29,7 +29,12 @@ namespace Game.Scripts
         {
             Open();
 
-            _loggedInAsText.text = "Logged in as: " + PlayerPrefs.GetString(OpenIdAuthenticator.LoginEmail);
+            string email = PlayerPrefs.GetString(OpenIdAuthenticator.LoginEmail);
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                email = "Guest";
+            }
+            _loggedInAsText.text = "Logged in as: " + email;
         }
 
         public void OpenMainMenuPage()
