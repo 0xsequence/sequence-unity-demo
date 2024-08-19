@@ -49,6 +49,7 @@ namespace Game.Scripts
             else
             {
                 Destroy(gameObject);
+                return;
             }
 
             SequenceWallet.OnWalletCreated += OnWalletCreated;
@@ -79,6 +80,14 @@ namespace Game.Scripts
         private void OnDestroy()
         {
             if (Wallet == null) return;
+            ResetWallet();
+            SequenceWallet.OnWalletCreated -= OnWalletCreated;
+            SceneManager.LoadScene("LoginScene");
+        }
+
+        private void ResetWallet()
+        {
+            if (Wallet == null) return;
             Wallet.OnSendTransactionComplete -= OnSendTransactionCompleteHandler;
             Wallet.OnSendTransactionFailed -= OnSendTransactionFailedHandler;
             Wallet.OnSignMessageComplete -= OnSignMessageCompleteHandler;
@@ -86,8 +95,7 @@ namespace Game.Scripts
             Wallet.OnDeployContractFailed -= OnDeployContractFailedHandler;
             Wallet.OnDropSessionComplete -= OnDropSessionCompleteHandler;
             Wallet.OnSessionsFound -= OnSessionsFoundHandler;
-            SequenceWallet.OnWalletCreated -= OnWalletCreated;
-            SceneManager.LoadScene("LoginScene");
+            Wallet = null;
         }
 
         private void OnSendTransactionCompleteHandler(SuccessfulTransactionReturn result) {
@@ -127,7 +135,8 @@ namespace Game.Scripts
         private void OnDropSessionCompleteHandler(string sessionId) {
             if (sessionId == Wallet.SessionId)
             {
-                Destroy(gameObject);
+                ResetWallet();
+                SceneManager.LoadScene("LoginScene");
             }
         }
         
@@ -197,13 +206,12 @@ namespace Game.Scripts
 
         public void Logout()
         {
-            Instance = null;
             Wallet.DropThisSession();
         }
 
         public void LinkEOA()
         {
-            EOAWalletLinker linker = new EOAWalletLinker(Wallet, "https://demo-waas-wallet-link-server.tpin.workers.dev/generateNonce");
+            EOAWalletLinker linker = new EOAWalletLinker(Wallet, "https://dev-api.sequence.app/rpc/API/GenerateWaaSVerificationURL");
             linker.OpenEOAWalletLink(Chain);
         }
     }

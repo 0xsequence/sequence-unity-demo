@@ -10,6 +10,7 @@ namespace Game.Scripts
         private void Awake()
         {
             SequenceWallet.OnWalletCreated += OnWalletCreated;
+            SequenceWallet.OnAccountFederated += OnAccountFederated;
         }
         
         private void OnWalletCreated(SequenceWallet wallet)
@@ -25,6 +26,11 @@ namespace Game.Scripts
         public void LoadGame()
         {
             SceneManager.LoadScene("MenuScene");
+        }
+        
+        private void OnAccountFederated(Account account)
+        {
+            LoadGame();
         }
     }
 }

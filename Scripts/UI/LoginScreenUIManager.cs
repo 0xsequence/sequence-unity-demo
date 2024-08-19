@@ -1,5 +1,6 @@
 using System;
 using Sequence.Demo;
+using Sequence.EmbeddedWallet;
 using UnityEngine;
 
 namespace Game.Scripts
@@ -12,6 +13,7 @@ namespace Game.Scripts
         private LoginPanel _loginPanel;
         private PlayFabLoginPanel _playFabLoginPanel;
         private GuestLoginPanel _guestLoginPanel;
+        private bool _federateAuthMode = false;
 
         private void Awake()
         {
@@ -33,7 +35,7 @@ namespace Game.Scripts
         public void SwitchToPlayFabLoginPanel()
         {
             _loginPanel.Close();
-            _playFabLoginPanel.Open();
+            _playFabLoginPanel.Open(_federateAuthMode);
             _leftButtons.Switch();
         }
         
@@ -56,6 +58,16 @@ namespace Game.Scripts
             _guestLoginPanel.Close();
             _loginPanel.Open();
             _rightButtons.Switch();
+        }
+
+        public void FederateAuth()
+        {
+            DisableGuestLogin();
+        }
+
+        private void DisableGuestLogin()
+        {
+            _rightButtons.gameObject.SetActive(false);
         }
     }
 }

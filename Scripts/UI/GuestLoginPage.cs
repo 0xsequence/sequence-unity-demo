@@ -14,7 +14,7 @@ namespace Game.Scripts
         public void Login()
         {
             _sequenceLogin = SequenceLogin.GetInstance();
-            _sequenceLogin.OnLoginFailed += (error, method, email) =>
+            _sequenceLogin.OnLoginFailed += (error, method, email, methods) =>
             {
                 _errorText.text = error;
             };

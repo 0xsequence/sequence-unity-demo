@@ -2,6 +2,7 @@ using PlayFab;
 using PlayFab.ClientModels;
 using Sequence.Demo;
 using Sequence.EmbeddedWallet;
+using Sequence.Utils;
 using TMPro;
 using UnityEngine;
 
@@ -16,6 +17,13 @@ namespace Game.Scripts
         private string _email;
         private string _password;
         private SequenceLogin _sequenceLogin;
+        private bool _federateAuth = false;
+        
+        public override void Open(params object[] args)
+        {
+            base.Open(args);
+            _federateAuth = args.GetObjectOfTypeIfExists<bool>();
+        }
 
         public void Login()
         {
@@ -27,7 +35,15 @@ namespace Game.Scripts
             PlayFabClientAPI.LoginWithEmailAddress(request,
                 result =>
                 {
-                    _sequenceLogin.PlayFabLogin(PlayFabSettings.staticSettings.TitleId, result.SessionTicket, _email);
+                    if (_federateAuth)
+                    {
+                        _sequenceLogin.FederateAccountPlayFab(PlayFabSettings.staticSettings.TitleId,
+                            result.SessionTicket, _email, SequenceConnector.Instance.Wallet.GetWalletAddress());
+                    }
+                    else
+                    {
+                        _sequenceLogin.PlayFabLogin(PlayFabSettings.staticSettings.TitleId, result.SessionTicket, _email);
+                    }
                 }, OnLoginFailure);
         }
         
@@ -50,7 +66,15 @@ namespace Game.Scripts
             PlayFabClientAPI.RegisterPlayFabUser(request,
                 result =>
                 {
-                    _sequenceLogin.PlayFabLogin(PlayFabSettings.staticSettings.TitleId, result.SessionTicket, _email);
+                    if (_federateAuth)
+                    {
+                        _sequenceLogin.FederateAccountPlayFab(PlayFabSettings.staticSettings.TitleId,
+                            result.SessionTicket, _email, SequenceConnector.Instance.Wallet.GetWalletAddress());
+                    }
+                    else
+                    {
+                        _sequenceLogin.PlayFabLogin(PlayFabSettings.staticSettings.TitleId, result.SessionTicket, _email);
+                    }
                 }, error =>
                 {
                     Debug.LogError(error.GenerateErrorReport());
