@@ -18,6 +18,8 @@ namespace Game.Scripts
         private Dictionary<BigInteger, TokenBalance> _tokenBalances = new Dictionary<BigInteger, TokenBalance>();
         
         private ItemCatalogue _itemCatalogue;
+        
+        private List<Address> _mintedStarterTokensTo = new List<Address>();
 
         public Inventory(IIndexer indexer, Address userAddress, ItemCatalogue itemCatalogue)
         {
@@ -40,6 +42,10 @@ namespace Game.Scripts
             }
             GetTokenBalancesReturn balances = await _indexer.GetTokenBalances(new GetTokenBalancesArgs(_userAddress, SequenceConnector.ContractAddress, false, page));
             int uniqueTokens = balances.balances.Length;
+            if (uniqueTokens == 0)
+            {
+                MintStarterTokens();
+            }
             for (int i = 0; i < uniqueTokens; i++)
             {
                 _tokenBalances[balances.balances[i].tokenID] = balances.balances[i];
@@ -49,6 +55,19 @@ namespace Game.Scripts
             {
                 await GetTokenBalances(balances.page);
             }
+        }
+
+        private async Task MintStarterTokens()
+        {
+            Address userAddress = SequenceConnector.Instance.Wallet.GetWalletAddress();
+            if (_mintedStarterTokensTo.Contains(userAddress))
+            {
+                return;
+            }
+            _mintedStarterTokensTo.Add(userAddress);
+            SequenceConnector.Instance.MintFungibleToken(300, false);
+            await SequenceConnector.Instance.SubmitQueuedTransactions(true);
+            SequenceConnector.Instance.MintTokensInInventoryOnly(new []{ SequenceConnector.CollectibleTokenId }, new BigInteger[] { 300 });
         }
 
         public void MintToken(string tokenId, BigInteger amount)

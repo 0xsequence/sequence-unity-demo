@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Token
   Description: A collectible token used as currency in Jelly Forest.
-  Icon: {fileID: 21300000, guid: 3060b6670da3a4c3fbbce758587fa109, type: 3}
+  Icon: {fileID: 21300000, guid: f5009206164a34b8495c04a3a08b0239, type: 3}
   TokenId: 1001
   PowerUpType: 5
   Tier: 0
+  IsHat: 0

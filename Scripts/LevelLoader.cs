@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using Game.Scripts.UI;
 using Sequence.EmbeddedWallet;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -26,6 +28,18 @@ namespace Game.Scripts
         public void LoadGame()
         {
             SceneManager.LoadScene("MenuScene");
+            StartCoroutine(ShowSignedInPopup());
+        }
+
+        private IEnumerator ShowSignedInPopup()
+        {
+            SignedInSuccessfullyPopup signedInSuccessfullyPopup = FindObjectOfType<SignedInSuccessfullyPopup>();
+            while (signedInSuccessfullyPopup == null)
+            {
+                yield return null;
+                signedInSuccessfullyPopup = FindObjectOfType<SignedInSuccessfullyPopup>();
+            }
+            signedInSuccessfullyPopup.Open();
         }
         
         private void OnAccountFederated(Account account)

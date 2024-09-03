@@ -1,4 +1,5 @@
 using System;
+using Game.Scripts.UI;
 using MoreMountains.TopDownEngine;
 using Sequence.Authentication;
 using Sequence.Demo;
@@ -12,17 +13,15 @@ namespace Game.Scripts
         [SerializeField] private TextMeshProUGUI _loggedInAsText;
         
         private MainMenuPage _mainMenuPage;
-        private ShopUpgradesMenuPage _shopUpgradesMenuPage;
-        private ShopHatsMenuPage _shopHatsMenuPage;
-        private SessionTransactionsPage _sessionTransactionsPage;
+        private ShopPanel _shopPanel;
+        private AccountPanel _accountPanel;
         
         protected override void Awake()
         {
             base.Awake();
             _mainMenuPage = GetComponentInChildren<MainMenuPage>();
-            _shopUpgradesMenuPage = GetComponentInChildren<ShopUpgradesMenuPage>();
-            _shopHatsMenuPage = GetComponentInChildren<ShopHatsMenuPage>();
-            _sessionTransactionsPage = GetComponentInChildren<SessionTransactionsPage>();
+            _shopPanel = GetComponentInChildren<ShopPanel>();
+            _accountPanel = GetComponentInChildren<AccountPanel>();
         }
 
         private void Start()
@@ -34,7 +33,7 @@ namespace Game.Scripts
             {
                 email = "Guest";
             }
-            _loggedInAsText.text = "Logged in as: " + email;
+            _loggedInAsText.text = email.ToUpper();
         }
 
         public void OpenMainMenuPage()
@@ -42,19 +41,14 @@ namespace Game.Scripts
             StartCoroutine(SetUIPage(_mainMenuPage));
         }
         
-        public void OpenShopUpgradesMenuPage()
+        public void OpenShopPanel()
         {
-            StartCoroutine(SetUIPage(_shopUpgradesMenuPage));
+            _shopPanel.Open();
         }
         
-        public void OpenShopHatsMenuPage()
+        public void OpenAccountPanel()
         {
-            StartCoroutine(SetUIPage(_shopHatsMenuPage));
-        }
-        
-        public void OpenSessionTransactionsPage()
-        {
-            StartCoroutine(SetUIPage(_sessionTransactionsPage));
+            _accountPanel.Open(_loggedInAsText.text);
         }
     }
 }

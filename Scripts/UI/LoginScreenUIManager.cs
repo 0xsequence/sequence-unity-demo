@@ -1,4 +1,5 @@
 using System;
+using Sequence.Authentication;
 using Sequence.Demo;
 using Sequence.EmbeddedWallet;
 using UnityEngine;
@@ -9,17 +10,20 @@ namespace Game.Scripts
     {
         [SerializeField] private ButtonSwitcher _leftButtons;
         [SerializeField] private ButtonSwitcher _rightButtons;
+        [SerializeField] private GameObject _cancelAndReturnToGameButton;
         
         private LoginPanel _loginPanel;
         private PlayFabLoginPanel _playFabLoginPanel;
         private GuestLoginPanel _guestLoginPanel;
         private bool _federateAuthMode = false;
+        private SignInSpawner _signInSpawner;
 
         private void Awake()
         {
             _loginPanel = GetComponentInChildren<LoginPanel>();
             _playFabLoginPanel = GetComponentInChildren<PlayFabLoginPanel>();
             _guestLoginPanel = GetComponentInChildren<GuestLoginPanel>();
+            _signInSpawner = GetComponentInChildren<SignInSpawner>();
         }
 
         private void Start()
@@ -30,6 +34,11 @@ namespace Game.Scripts
             }
 
             _loginPanel.Open();
+        }
+
+        public void PlayFabLogin()
+        {
+            _playFabLoginPanel.Open();
         }
         
         public void SwitchToPlayFabLoginPanel()
@@ -63,11 +72,54 @@ namespace Game.Scripts
         public void FederateAuth()
         {
             DisableGuestLogin();
+            _cancelAndReturnToGameButton.SetActive(true);
+            IWallet wallet = SequenceConnector.Instance.Wallet;
+            wallet.OnAccountListGenerated += OnAccountListGenerated;
+            wallet.GetAccountList();
         }
 
         private void DisableGuestLogin()
         {
-            _rightButtons.gameObject.SetActive(false);
+            _signInSpawner.DisableMethod(LoginMethod.Guest);
+        }
+        
+        private void OnAccountListGenerated(IntentResponseAccountList accounts)
+        {
+            SequenceConnector.Instance.Wallet.OnAccountListGenerated -= OnAccountListGenerated;
+            
+            Account[] accountList = accounts.accounts;
+            int length = accountList.Length;
+            for (int i = 0; i < length; i++)
+            {
+                Account account = accountList[i];
+                if (account.identityType == IdentityType.Guest || account.identityType == IdentityType.Email)
+                {
+                    continue;
+                }
+                else if (account.identityType == IdentityType.PlayFab)
+                {
+                    _signInSpawner.DisableMethod(LoginMethod.PlayFab);
+                }
+                else
+                {
+                    if (account.issuer.Contains("google"))
+                    {
+                        _signInSpawner.DisableMethod(LoginMethod.Google);
+                    }
+                    else if (account.issuer.Contains("facebook"))
+                    {
+                        _signInSpawner.DisableMethod(LoginMethod.Facebook);
+                    }
+                    else if (account.issuer.Contains("discord"))
+                    {
+                        _signInSpawner.DisableMethod(LoginMethod.Discord);
+                    }
+                    else if (account.issuer.Contains("apple"))
+                    {
+                        _signInSpawner.DisableMethod(LoginMethod.Apple);
+                    }
+                }
+            }
         }
     }
 }

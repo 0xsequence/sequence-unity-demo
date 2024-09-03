@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Game.Scripts
 {
-    public class GuestLoginPage : UIPage
+    public class GuestLogin : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI _errorText;
         

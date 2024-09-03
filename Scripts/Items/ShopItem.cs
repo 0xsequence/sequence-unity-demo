@@ -54,6 +54,8 @@ namespace Game.Scripts
                 {
                     GetTransactionReceipt(successfulTransactionReturn);
                 }
+                
+                SequenceConnector.Instance.OnItemPurchasedSuccessfully?.Invoke();
             }
             else if (result is FailedTransactionReturn failed)
             {

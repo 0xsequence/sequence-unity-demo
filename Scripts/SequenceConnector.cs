@@ -38,6 +38,8 @@ namespace Game.Scripts
         public List<string> SessionTransactionHashes { get; private set; }
         
         public Action<string> OnSuccessfulTransaction;
+
+        public Action OnItemPurchasedSuccessfully;
         
         private void Awake()
         {
@@ -136,6 +138,7 @@ namespace Game.Scripts
             if (sessionId == Wallet.SessionId)
             {
                 ResetWallet();
+                SequenceLogin.GetInstance().SetConnectedWalletAddress(null);
                 SceneManager.LoadScene("LoginScene");
             }
         }
@@ -144,10 +147,13 @@ namespace Game.Scripts
             // Do something
         }
 
-        public void MintFungibleToken(uint amount = 1)
+        public void MintFungibleToken(uint amount = 1, bool mintInInventory = true)
         {
             _permissionedMinterTransactionQueuer.Enqueue(new PermissionedMintTransaction(CollectibleTokenId, amount));
-            Inventory.MintToken(CollectibleTokenId, amount);
+            if (mintInInventory)
+            {
+                Inventory.MintToken(CollectibleTokenId, amount);
+            }
         }
 
         public async Task<TransactionReturn> SubmitQueuedTransactions(bool overrideWait = false, bool waitForReceipt = true)
@@ -211,8 +217,7 @@ namespace Game.Scripts
 
         public void LinkEOA()
         {
-            EOAWalletLinker linker = new EOAWalletLinker(Wallet, "https://dev-api.sequence.app/rpc/API/GenerateWaaSVerificationURL");
-            linker.OpenEOAWalletLink(Chain);
+            Application.OpenURL("https://demo-waas-wallet-link.pages.dev/");
         }
     }
 }
