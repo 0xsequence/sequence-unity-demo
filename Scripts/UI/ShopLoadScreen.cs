@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using PlayFab.ClientModels;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +18,29 @@ namespace Game.Scripts
         private void Start()
         {
             StartCoroutine(LoadingAnimation());
+            
+            SequenceConnector.Instance.OnItemPurchasedSuccessfully += HandleItemPurchasedSuccessfully;
+            ShopItem.OnFailedToPurchaseShopItem += HandleFailedToPurchaseShopItem;
+            PremiumItem.OnFailedToPurchaseShopItem += HandleFailedToPurchaseShopItem;
+        }
+        
+        private void OnDestroy()
+        {
+            StopAllCoroutines();
+            
+            SequenceConnector.Instance.OnItemPurchasedSuccessfully -= HandleItemPurchasedSuccessfully;
+            ShopItem.OnFailedToPurchaseShopItem -= HandleFailedToPurchaseShopItem;
+            PremiumItem.OnFailedToPurchaseShopItem -= HandleFailedToPurchaseShopItem;
+        }
+        
+        private void HandleItemPurchasedSuccessfully()
+        {
+            Destroy(gameObject);
+        }
+        
+        private void HandleFailedToPurchaseShopItem(string errorMessage)
+        {
+            Destroy(gameObject);
         }
 
         private IEnumerator LoadingAnimation()

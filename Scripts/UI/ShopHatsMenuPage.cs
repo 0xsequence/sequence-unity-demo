@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Sequence.Demo;
 using TMPro;
@@ -11,11 +12,12 @@ namespace Game.Scripts
         [SerializeField] private TextMeshProUGUI _buyEquipButtonText;
         [SerializeField] private Image _hatImage;
         [SerializeField] private Image _playerImage;
-        [SerializeField] private TextMeshProUGUI _costText;
+        [SerializeField] private TextExtender _costText;
         [SerializeField] private GameObject _shopLoadingScreenPrefab;
         [SerializeField] private GameObject _costItemObject;
         [SerializeField] private Color _defaultButtonColor;
         [SerializeField] private Color _buyButtonColor;
+        [SerializeField] private GameObject _costIcon;
 
         private List<ShopItem> _hats;
         private Button _buyEquipButton;
@@ -26,6 +28,19 @@ namespace Game.Scripts
         protected override void Awake()
         {
             base.Awake();
+            
+#if !UNITY_IOS && !UNITY_ANDROID
+            List<ShopItem> nonPremiumShopItems = new List<ShopItem>();
+            foreach (ShopItem shopItem in _shopItems)
+            {
+                if (shopItem is not PremiumItem)
+                {
+                    nonPremiumShopItems.Add(shopItem);
+                }
+            }
+            _shopItems = nonPremiumShopItems.ToArray();
+#endif
+            
             _hats = new List<ShopItem>();
             int shopItems = _shopItems.Length;
             if (shopItems == 0)
@@ -79,7 +94,22 @@ namespace Game.Scripts
             ShopItem hat = _hats[_currentHatIndex];
             _hatImage.sprite = hat.Item.Icon;
             _buyEquip = new BuyEquipButton(hat, _shopLoadingScreenPrefab, transform, _buyEquipButtonText, _buyEquipButton, hat.Status, _costItemObject, _defaultButtonColor, _buyButtonColor);
-            _costText.text = hat.CostItems[0].Amount.ToString();
+            
+            SetCostText(hat);
+        }
+
+        private void SetCostText(ShopItem hat)
+        {
+            if (hat is PremiumItem premiumItem)
+            {
+                _costText.SetText(premiumItem.GetPriceString(), resizeWidth: true);
+                _costIcon.gameObject.SetActive(false);
+            }
+            else
+            {
+                _costText.SetText(hat.CostItems[0].Amount.ToString(), resizeWidth: true);
+                _costIcon.gameObject.SetActive(true);
+            }
         }
 
         private bool IsPlayerGreen()

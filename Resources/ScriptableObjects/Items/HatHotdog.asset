@@ -15,7 +15,7 @@ MonoBehaviour:
   Name: HatHotdog
   Description: Wear a hotdog as a hat.
   Icon: {fileID: 21300000, guid: 48adb2ca56fe5754a86c539a6bd10636, type: 3}
-  TokenId: 1019
+  TokenId: 10190
   PowerUpType: 5
   Tier: 0
   IsHat: 1

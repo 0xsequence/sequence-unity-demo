@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60b766232d35426ba6d8bad425a85c38, type: 3}
+  m_Script: {fileID: 11500000, guid: 2919059c0eac4f428e4d81499989d151, type: 3}
   m_Name: HatHotdog
   m_EditorClassIdentifier: 
   Item: {fileID: 11400000, guid: ae4c719369a5746b398a01d586187f83, type: 2}
-  CostItems:
-  - {fileID: 11400000, guid: ab5a9d6e2571b4fe0b465fad36b2aa1b, type: 2}
+  CostItems: []
   RequiredAchievements: []

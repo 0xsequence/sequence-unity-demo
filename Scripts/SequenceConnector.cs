@@ -40,6 +40,8 @@ namespace Game.Scripts
         public Action<string> OnSuccessfulTransaction;
 
         public Action OnItemPurchasedSuccessfully;
+
+        private const string _mintEndpoint = "https://sequence-relayer-jelly-forest.tpin.workers.dev/";
         
         private void Awake()
         {
@@ -76,7 +78,7 @@ namespace Game.Scripts
             Inventory = new Inventory(Indexer, Wallet.GetWalletAddress(), ItemCatalogue);
             
             _transactionQueuer.Setup(Wallet, Chain);
-            _permissionedMinterTransactionQueuer.Setup(Wallet, Chain, "https://sequence-relayer-jelly-forest2.tpin.workers.dev/", ContractAddress);
+            _permissionedMinterTransactionQueuer.Setup(Wallet, Chain, _mintEndpoint, ContractAddress);
         }
 
         private void OnDestroy()
@@ -169,12 +171,29 @@ namespace Game.Scripts
                 }
             }
             TransactionReturn result = await _transactionQueuer.SubmitTransactions(overrideWait, waitForReceipt);
+            if (result == null && mintResult.Success)
+            {
+                SuccessfulTransactionReturn[] successfulTransactionReturns = new SuccessfulTransactionReturn[mintResult.TransactionHashes.Length];
+                for (int i = 0; i < mintResult.TransactionHashes.Length; i++)
+                {
+                    successfulTransactionReturns[i] = new SuccessfulTransactionReturn(mintResult.TransactionHashes[i], "", null, null);
+                }
+
+                return new SuccessfulBatchTransactionReturn(successfulTransactionReturns);
+            }
             return result;
         }
         
         public void AddToTransactionQueue(IQueueableTransaction transaction)
         {
             _transactionQueuer.Enqueue(transaction);
+        }
+
+        public void AddToPremiumTransactionQueue(PermissionedMintTransaction payload, string iapReceipt)
+        {
+            PremiumIAPMinter minter = new PremiumIAPMinter(new MintingRequestProver(Wallet, Chain),
+                _mintEndpoint, ContractAddress, iapReceipt);
+            _permissionedMinterTransactionQueuer.Enqueue((payload, minter));
         }
 
         public void DebugAddTokens()

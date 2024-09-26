@@ -88,11 +88,18 @@ namespace Game.Scripts
                     chainId = _indexer.GetChainID()
                 };
             }
-            
-            OnInventoryBalanceChanged?.Invoke(new InventoryBalanceChanged(
-                tokenId, 
-                amount, 
-                _tokenBalances[tokenIdBigInt].balance));
+
+            try
+            {
+                OnInventoryBalanceChanged?.Invoke(new InventoryBalanceChanged(
+                    tokenId, 
+                    amount, 
+                    _tokenBalances[tokenIdBigInt].balance));
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Error invoking OnInventoryBalanceChanged: {e.Message}");
+            }
         }
         
         public void BurnToken(string tokenId, BigInteger amount)

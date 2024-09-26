@@ -1536,12 +1536,12 @@ MonoBehaviour:
   _tokensAmountText: {fileID: 1412647639}
   _shopItems:
   - {fileID: 11400000, guid: 776162fe5b7c74bde9718d72b45eaf8f, type: 2}
+  - {fileID: 11400000, guid: 8bc536806c4b44fb68cbc499b437bdde, type: 2}
   - {fileID: 11400000, guid: d6145f50f1c6840f9b51220e80bce056, type: 2}
   - {fileID: 11400000, guid: 839ca3a8c8b54485581216397eeb147e, type: 2}
   - {fileID: 11400000, guid: c88c4c01940e645a4800818d650434ba, type: 2}
   - {fileID: 11400000, guid: e25315567178b491f8c9d17602dc3596, type: 2}
   - {fileID: 11400000, guid: 130db5ecdf0ef43f5ba0ee2181056689, type: 2}
-  - {fileID: 11400000, guid: 03dff62f3caaa480181512ad2a152f97, type: 2}
   - {fileID: 11400000, guid: 8e40185d7a4fe4ca8b225002eba66ed7, type: 2}
   - {fileID: 11400000, guid: 07eba26761b4c4d53af2a42296df1798, type: 2}
   - {fileID: 11400000, guid: 2552f9aaab4bd47a5afadb9421f9b5f9, type: 2}
@@ -1549,11 +1549,12 @@ MonoBehaviour:
   _buyEquipButtonText: {fileID: 179635711}
   _hatImage: {fileID: 2115754320}
   _playerImage: {fileID: 923212290}
-  _costText: {fileID: 1898446620}
+  _costText: {fileID: 1898446622}
   _shopLoadingScreenPrefab: {fileID: 3094631411173026328, guid: 5d6225d1dc77b486f8163c9c79169481, type: 3}
   _costItemObject: {fileID: 323209118}
   _defaultButtonColor: {r: 0.37254903, g: 0.25490198, b: 0.42352942, a: 1}
   _buyButtonColor: {r: 0.8509804, g: 0.25490198, b: 0.11372549, a: 0.29803923}
+  _costIcon: {fileID: 577346716}
 --- !u!1 &255294491
 GameObject:
   m_ObjectHideFlags: 0
@@ -2267,7 +2268,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &323209119
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3013,9 +3014,9 @@ RectTransform:
   m_Father: {fileID: 323209119}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 92.34, y: -26}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 35, y: 35}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &577346718
@@ -3772,7 +3773,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22
+  m_fontSize: 24.9
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -10128,7 +10129,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1608129396}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.038799394
+  m_Size: 0.05688119
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -10950,7 +10951,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1552464101}
   m_HandleRect: {fileID: 1552464100}
   m_Direction: 0
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -12087,6 +12088,7 @@ GameObject:
   - component: {fileID: 1898446619}
   - component: {fileID: 1898446621}
   - component: {fileID: 1898446620}
+  - component: {fileID: 1898446622}
   m_Layer: 5
   m_Name: AmountText
   m_TagString: Untagged
@@ -12109,10 +12111,10 @@ RectTransform:
   m_Father: {fileID: 323209119}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 124.5, y: -26}
-  m_SizeDelta: {x: 29.32, y: 35}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 28.89, y: 35}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1898446620
 MonoBehaviour:
@@ -12211,6 +12213,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1898446618}
   m_CullTransparentMesh: 1
+--- !u!114 &1898446622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1898446618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad19927bdcad545d68eb65c3af71936c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxWidth: 90
+  _maxHeight: 35
 --- !u!1 &2001047810
 GameObject:
   m_ObjectHideFlags: 0
@@ -12883,7 +12899,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 998567416}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.051799394
+  m_Size: 0.069881186
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

@@ -42,20 +42,22 @@ namespace Game.Scripts
                 OnFailedToPurchaseShopItem?.Invoke($"Failed to purchase shop item: {error}");
                 return;
             }
-
-            SequenceConnector.Instance.AddToTransactionQueue(new PurchaseShopItemQueueableTransaction(this));
+            
+            await AddToQueue();
             TransactionReturn result = await SequenceConnector.Instance.SubmitQueuedTransactions(true, false);
             if (result is SuccessfulTransactionReturn successfulTransactionReturn)
             {
                 BurnTokensFromInventory();
                 MintTokenInInventory();
 
-                if (string.IsNullOrWhiteSpace(successfulTransactionReturn.txHash))
+                if (string.IsNullOrWhiteSpace(successfulTransactionReturn.txHash) && successfulTransactionReturn is not SuccessfulBatchTransactionReturn)
                 {
                     GetTransactionReceipt(successfulTransactionReturn);
                 }
                 
                 SequenceConnector.Instance.OnItemPurchasedSuccessfully?.Invoke();
+
+                Cleanup();
             }
             else if (result is FailedTransactionReturn failed)
             {
@@ -65,8 +67,19 @@ namespace Game.Scripts
             }
             else
             {
-                throw new Exception("Unexpected transaction result type");
+                Debug.LogWarning($"Unexpected transaction result type {result}");
             }
+        }
+
+        protected virtual Task AddToQueue()
+        {
+            SequenceConnector.Instance.AddToTransactionQueue(new PurchaseShopItemQueueableTransaction(this));
+            return Task.CompletedTask;
+        }
+
+        protected virtual void Cleanup()
+        {
+            // Do nothing
         }
 
         private void BurnTokensFromInventory()

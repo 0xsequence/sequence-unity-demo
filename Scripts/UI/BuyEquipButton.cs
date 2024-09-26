@@ -20,6 +20,7 @@ namespace Game.Scripts
         private Color _defaultButtonColor; 
         private Color _buyButtonColor;
         private Image _buttonImage;
+        private GameObject _buyEquipButtonCostItemIcon;
         
         private Dictionary<ItemStatus, string> ButtonTexts = new Dictionary<ItemStatus, string>
         {
@@ -67,9 +68,8 @@ namespace Game.Scripts
 
         private async Task DoBuy()
         {
-            GameObject loadingScreen = Object.Instantiate(_shopLoadingScreenPrefab, _loadingScreenParent);
+            Object.Instantiate(_shopLoadingScreenPrefab, _loadingScreenParent);
             await _shopItem.Buy();
-            Object.Destroy(loadingScreen);
         }
 
         private void Equip()
