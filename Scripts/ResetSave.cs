@@ -6,11 +6,16 @@ namespace Game.Scripts
         {
             if (_cheatCode == "reset")
             {
-                SequenceConnector.Instance.Inventory.ResetSave();
+                ResetWalletSave();
                 return true;
             }
 
             return false;
+        }
+
+        public void ResetWalletSave()
+        {
+            SequenceConnector.Instance.Inventory.ResetSave();
         }
     }
 }

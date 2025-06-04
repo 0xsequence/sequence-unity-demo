@@ -48,7 +48,7 @@ namespace Game.Scripts
                 return;
             }
             
-            if (IsHat && equipped)
+            if (IsHat && equipped && !_skinEquipped)
             {
                 OnHatEquipped?.Invoke(TokenId);
             }

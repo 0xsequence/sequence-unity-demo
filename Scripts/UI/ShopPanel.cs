@@ -60,5 +60,10 @@ namespace Game.Scripts.UI
             
             SequenceConnector.Instance.DebugAddTokens();
         }
+
+        public void ShowWebMarketplace()
+        {
+            Application.OpenURL("https://cute-fox-343.sequence.market/");
+        }
     }
 }

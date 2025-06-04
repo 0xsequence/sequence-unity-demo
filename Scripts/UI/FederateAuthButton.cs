@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Sequence.EmbeddedWallet;
+using Sequence.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -15,7 +16,6 @@ namespace Game.Scripts
 
         private async Task SetupAuthFederation()
         {
-            await Task.Delay(100);
             SceneManager.LoadScene("LoginScene");
             LoginScreenUIManager loginScreenUIManager = FindObjectOfType<LoginScreenUIManager>();
             while (loginScreenUIManager == null)

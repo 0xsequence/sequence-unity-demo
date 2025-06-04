@@ -99,7 +99,7 @@ namespace Game.Scripts
                 InitiateQuickDrop();
             }
             
-#if UNITY_STANDALONE_OSX || UNITY_EDITOR
+#if UNITY_STANDALONE_OSX || UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_WEBGL
             if (Input.GetKeyDown(KeyCode.Z))
             {
                 InitiateQuickDrop();

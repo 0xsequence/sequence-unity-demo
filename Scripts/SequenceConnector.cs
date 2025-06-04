@@ -21,11 +21,11 @@ namespace Game.Scripts
         private SequenceWalletTransactionQueuer _transactionQueuer;
         private PermissionedMinterTransactionQueuer _permissionedMinterTransactionQueuer;
         
-        public const string ContractAddress = "0x32d70df2b156242f1b19f60fa40d05f8966244ec"; 
+        public const string ContractAddress = "0x93a8c78ff36f656e56d2044e9c925dcd254e51ce"; 
         public const string CollectibleTokenId = "1001";
-        public const string BurnToMintContractAddress = "0xEC96AD8eb0DBba71c6f218344450e4Bd30D7d584";
+        public const string BurnToMintContractAddress = "0x079294e6ffec16234578c672fa3fbfd4b6c48640";
 
-        public const Chain Chain = Sequence.Chain.ArbitrumNova;
+        public const Chain Chain = Sequence.Chain.Avalanche;
         public static SequenceConnector Instance { get; private set; }
 
         public SequenceWallet Wallet { get; private set; }
@@ -41,7 +41,7 @@ namespace Game.Scripts
 
         public Action OnItemPurchasedSuccessfully;
 
-        private const string _mintEndpoint = "https://sequence-relayer-jelly-forest.tpin.workers.dev/";
+        private const string _mintEndpoint = "https://sequence-relayer-jelly-forest-avalanche.sequence-demos.xyz";
         
         private void Awake()
         {
@@ -62,6 +62,14 @@ namespace Game.Scripts
             _permissionedMinterTransactionQueuer = GetComponent<PermissionedMinterTransactionQueuer>();
             ItemCatalogue = new ItemCatalogue();
             SessionTransactionHashes = new List<string>();
+        }
+
+        private void Update()
+        {
+            if (Inventory != null)
+            {
+                Inventory.RefreshTokenBalances();
+            }
         }
 
         private void OnWalletCreated(SequenceWallet wallet)
@@ -237,6 +245,33 @@ namespace Game.Scripts
         public void LinkEOA()
         {
             Application.OpenURL("https://demo-waas-wallet-link.pages.dev/");
+        }
+
+        public BigInteger GetQueuedMintAmount()
+        {
+            string queued = _permissionedMinterTransactionQueuer.ToString();
+            if (queued == "0 Queued Transactions")
+            {
+                return 0;
+            }
+            
+            string[] split = queued.Split(':');
+            string[] transactions = split[1].Split('|');
+            int transactionsCount = transactions.Length;
+            BigInteger total = 0;
+            string filler = " Mint ";
+            for (int i = 0; i < transactionsCount; i++)
+            {
+                string amount = transactions[i].Substring(filler.Length, transactions[i].IndexOf(" of") - filler.Length).Trim();
+                string id = transactions[i].Substring(transactions[i].IndexOf("Token Id") + "Token Id".Length).Trim();
+                id = id.Substring(0, id.IndexOf(','));
+                if (id == CollectibleTokenId)
+                {
+                    total += BigInteger.Parse(amount);
+                }
+            }
+            
+            return total;
         }
     }
 }

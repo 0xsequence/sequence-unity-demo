@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: QuickDropA
   m_EditorClassIdentifier: 
   Name: Quick Drop
-  Description: Tap with two fingers to quickly drop to the ground.
+  Description: Hit the 'z' key to quickly drop to the ground.
   Icon: {fileID: 21300000, guid: 78f1aacb8e5d14bb4b1cc6f3474a998d, type: 3}
   TokenId: 1008
   PowerUpType: 2
   Tier: 1
+  IsHat: 0

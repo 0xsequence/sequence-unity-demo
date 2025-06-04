@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace Game.Scripts
 {
+#if UNITY_IOS || UNITY_ANDROID
     public class UnityServices : MonoBehaviour
     {
         public string environment = "production";
@@ -27,4 +28,5 @@ namespace Game.Scripts
             UnityIAP.GetInstance(); // This will initialize IAP
         }
     }
+#endif
 }

@@ -6,6 +6,7 @@ using Sequence;
 using Sequence.Contracts;
 using Sequence.EmbeddedWallet;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Game.Scripts
 {
@@ -20,6 +21,9 @@ namespace Game.Scripts
         private ItemCatalogue _itemCatalogue;
         
         private List<Address> _mintedStarterTokensTo = new List<Address>();
+        private const int StarterTokenAmount = 300;
+        private DateTime _lastTokenBalanceRefreshTime;
+        private float _timeInSecondsBetweenTokenBalanceRefreshes = 10;
 
         public Inventory(IIndexer indexer, Address userAddress, ItemCatalogue itemCatalogue)
         {
@@ -31,6 +35,11 @@ namespace Game.Scripts
 
         public void RefreshTokenBalances()
         {
+            if ((DateTime.UtcNow - _lastTokenBalanceRefreshTime).TotalSeconds < _timeInSecondsBetweenTokenBalanceRefreshes)
+            {
+                return;
+            }
+            _lastTokenBalanceRefreshTime = DateTime.UtcNow;
             GetTokenBalances();
         }
         
@@ -48,7 +57,12 @@ namespace Game.Scripts
             }
             for (int i = 0; i < uniqueTokens; i++)
             {
-                _tokenBalances[balances.balances[i].tokenID] = balances.balances[i];
+                BigInteger tokenID = balances.balances[i].tokenID;
+                _tokenBalances[tokenID] = balances.balances[i];
+                if (tokenID == BigInteger.Parse(SequenceConnector.CollectibleTokenId))
+                {
+                    _tokenBalances[tokenID].balance += SequenceConnector.Instance.GetQueuedMintAmount();
+                }
             }
             
             if (balances.page.more)
@@ -65,9 +79,9 @@ namespace Game.Scripts
                 return;
             }
             _mintedStarterTokensTo.Add(userAddress);
-            SequenceConnector.Instance.MintFungibleToken(300, false);
+            SequenceConnector.Instance.MintFungibleToken(StarterTokenAmount, false);
             await SequenceConnector.Instance.SubmitQueuedTransactions(true);
-            SequenceConnector.Instance.MintTokensInInventoryOnly(new []{ SequenceConnector.CollectibleTokenId }, new BigInteger[] { 300 });
+            SequenceConnector.Instance.MintTokensInInventoryOnly(new []{ SequenceConnector.CollectibleTokenId }, new BigInteger[] { StarterTokenAmount });
         }
 
         public void MintToken(string tokenId, BigInteger amount)
@@ -201,11 +215,13 @@ namespace Game.Scripts
                     Application.OpenURL(ChainDictionaries.BlockExplorerOf[SequenceConnector.Chain] + "tx/" + success.txHash);
                 }
             }
-            
+
             PlayerPrefs.DeleteAll();
             PlayerPrefs.Save();
-            
-            await GetTokenBalances();
+
+            _tokenBalances = new Dictionary<BigInteger, TokenBalance>();
+            _mintedStarterTokensTo.Remove(SequenceConnector.Instance.Wallet.GetWalletAddress());
+            await MintStarterTokens();
             
             Debug.Log("Finished resetting game");
         }

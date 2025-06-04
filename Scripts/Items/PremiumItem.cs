@@ -10,7 +10,9 @@ namespace Game.Scripts
     public class PremiumItem : ShopItem
     {
         private bool _readyForFulfillment = false;
+#if UNITY_IOS || UNITY_ANDROID
         private UnityIAP _iap;
+#endif
         private string _receipt;
         
         protected override async Task AddToQueue()
@@ -63,16 +65,21 @@ namespace Game.Scripts
         {
             base.Cleanup();
             _readyForFulfillment = false;
+#if UNITY_IOS || UNITY_ANDROID
             _iap.OnPurchaseFulfilled(Item.TokenId);
+#endif
         }
 
         public string GetPriceString()
         {
+#if UNITY_IOS || UNITY_ANDROID
             if (_iap == null)
             {
                 _iap = UnityIAP.GetInstance();
             }
             return _iap.GetPriceString(Item.TokenId);
+#endif
+            return "";
         }
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine.Purchasing;
 
 namespace Game.Scripts
 {
+#if UNITY_IOS || UNITY_ANDROID
     public class UnityIAP : IStoreListener
     {
         private IStoreController _controller;
@@ -23,7 +24,7 @@ namespace Game.Scripts
         private UnityIAP()
         {
             var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
-            builder.AddProduct("10190", ProductType.NonConsumable, new IDs
+            builder.AddProduct("10190", ProductType.Consumable, new IDs
             {
                 { "10190", GooglePlay.Name },
                 { "10190", AppleAppStore.Name }
@@ -48,6 +49,15 @@ namespace Game.Scripts
         public void OnInitializeFailed(InitializationFailureReason error)
         {
             string errorMessage = "Failed to initialize Unity IAP: " + error;
+            InitializationError = errorMessage;
+            Debug.LogError(errorMessage);
+            throw new Exception(errorMessage);
+        }
+
+        // Unity IAP now requires you have both versions of this method...
+        public void OnInitializeFailed(InitializationFailureReason error, string message)
+        {
+            string errorMessage = "Failed to initialize Unity IAP: " + error + " message: " + message;
             InitializationError = errorMessage;
             Debug.LogError(errorMessage);
             throw new Exception(errorMessage);
@@ -95,8 +105,7 @@ namespace Game.Scripts
         public string GetPriceString(string productId)
         {
             Product product = _controller.products.WithID(productId);
-            string price = product.metadata.localizedPriceString;
-            return price;
+            return product != null ? product.metadata.localizedPriceString : "N/A";
         }
     }
 
@@ -112,4 +121,5 @@ namespace Game.Scripts
             Receipt = receipt;
         }
     }
+#endif
 }

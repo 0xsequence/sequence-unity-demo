@@ -15,6 +15,7 @@ namespace Game.Scripts
         private LoginPanel _loginPanel;
         private PlayFabLoginPanel _playFabLoginPanel;
         private GuestLoginPanel _guestLoginPanel;
+        private EmailLoginPanel _emailLoginPanel;
         private bool _federateAuthMode = false;
         private SignInSpawner _signInSpawner;
 
@@ -23,6 +24,7 @@ namespace Game.Scripts
             _loginPanel = GetComponentInChildren<LoginPanel>();
             _playFabLoginPanel = GetComponentInChildren<PlayFabLoginPanel>();
             _guestLoginPanel = GetComponentInChildren<GuestLoginPanel>();
+            _emailLoginPanel = GetComponentInChildren<EmailLoginPanel>();
             _signInSpawner = GetComponentInChildren<SignInSpawner>();
         }
 
@@ -38,7 +40,12 @@ namespace Game.Scripts
 
         public void PlayFabLogin()
         {
-            _playFabLoginPanel.Open();
+            _playFabLoginPanel.Open(_federateAuthMode);
+        }
+
+        public void EmailLogin()
+        {
+            _emailLoginPanel.Open();
         }
         
         public void SwitchToPlayFabLoginPanel()
